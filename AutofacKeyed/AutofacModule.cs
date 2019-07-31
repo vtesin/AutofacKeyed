@@ -9,6 +9,8 @@ namespace AutofacKeyed
         {
             base.Load(builder);
 
+            builder.RegisterType<RemoteClient>().As<IRemoteClient>().SingleInstance();
+
             builder.RegisterGeneric(typeof(DbCommandWrapper<,>))
                 .AsImplementedInterfaces()
                 .Keyed(WrapperTypes.DbWrapper, typeof(ICommandWrapper<,>))
