@@ -1,6 +1,6 @@
 ﻿namespace AutofacKeyed
 {
-    internal enum WrapperTypes
+    public enum WrapperTypes
     {
         DbWrapper,
         RemoteService

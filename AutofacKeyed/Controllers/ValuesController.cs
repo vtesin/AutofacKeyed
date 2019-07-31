@@ -1,8 +1,9 @@
-﻿using Autofac.Features.AttributeFilters;
+﻿using System;
 using AutofacKeyed.Model;
 using AutofacKeyed.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Autofac.Features.Indexed;
 
 namespace AutofacKeyed.Controllers
 {
@@ -10,14 +11,13 @@ namespace AutofacKeyed.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private readonly ICommandWrapper<TxnReq, TxnRe> _commandWrapper;
-        private readonly ICommandWrapper<TxnReq, TxnRe> _remoteWrapper;
+        private readonly ICommandWrapper<ITxnReq, ITxnRe> _commandWrapper;
+        private readonly ICommandWrapper<ITxnReq, ITxnRe> _remoteWrapper;
 
-        public ValuesController([KeyFilter(WrapperTypes.DbWrapper)]ICommandWrapper<TxnReq, TxnRe> commandWrapper,
-            [KeyFilter(WrapperTypes.RemoteService)]ICommandWrapper<TxnReq, TxnRe> remoteCommandWrapper)
+        public ValuesController(IIndex<WrapperTypes, Func<ICommandWrapper<ITxnReq, ITxnRe>>> wrapperFactories)
         {
-            _commandWrapper = commandWrapper;
-            _remoteWrapper = remoteCommandWrapper;
+            _commandWrapper = wrapperFactories[WrapperTypes.DbWrapper]();
+            _remoteWrapper = wrapperFactories[WrapperTypes.RemoteService]();
         }
         // GET api/values
         [HttpGet]

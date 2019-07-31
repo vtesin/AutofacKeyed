@@ -1,6 +1,6 @@
 ﻿namespace AutofacKeyed.Wrappers
 {
-    public interface ICommandWrapper<TV, TW>
+    public interface ICommandWrapper<in TV, out TW>
     {
         /// <summary>
         /// Do the wrapper logic
